@@ -5,7 +5,7 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
     // define query functionality to work with Mongoose Models
     Query: {
-      user: async (parent, args, context) => {
+      me: async (parent, args, context) => {
         if (context.user) {
           const userData = await User.findOne({ id: context.user._id})
             .select('-__v -password');
@@ -46,7 +46,7 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in');
         },
         // delete
-        deleteBook: async(parent, args, context) => {
+        removeBook: async(parent, args, context) => {
             if (context.user) {
               const updatedUser = await User.findOneAndUpdate(
                 { _id: context.user._id },
