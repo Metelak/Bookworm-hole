@@ -13,6 +13,7 @@ const LoginForm = () => {
 
   // loginUser mutation functionality replaced from imported API
   const [login, { error }] = useMutation(LOGIN_USER);
+  console.log(error);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
