@@ -12,7 +12,7 @@ const LoginForm = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   // loginUser mutation functionality replaced from imported API
-  const [loginUser] = useMutation(LOGIN_USER);
+  const [login] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -33,7 +33,7 @@ const LoginForm = () => {
       const { data } = await login({
         variables: { ...userFormData}
       });
-      Auth.login(token);
+      Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
