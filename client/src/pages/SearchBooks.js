@@ -70,12 +70,15 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
+      await saveBook({ 
+        variables: {
+          bookId: bookToSave.bookId,
+          authors: bookToSave.authors,
+          title: bookToSave.title,
+          description: bookToSave.description,
+          image: bookToSave.image,
+      },
+    });
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
@@ -148,3 +151,8 @@ const SearchBooks = () => {
 };
 
 export default SearchBooks;
+
+
+// if (!response.ok) {
+//   throw new Error('something went wrong!');
+// }
