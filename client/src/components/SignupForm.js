@@ -14,7 +14,8 @@ const SignupForm = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   // addUser mutation functionality replaced from imported API
-  const [addUser] = useMutation(ADD_USER);
+  const [addUser, { error }] = useMutation(ADD_USER);
+  if (error) console.log(error);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;

@@ -18,6 +18,23 @@ const resolvers = {
     },
     // define mutation functionality to work with Mongoose Model
     Mutation: {
+      login: async (parent, { email, password }) => {
+        const user = await User.findOne({ email });
+  
+        if (!user) {
+          throw new AuthenticationError('Incorrect credentials');
+        }
+  
+        const correctPw = await user.isCorrectPassword(password);
+  
+        if (!correctPw) {
+          throw new AuthenticationError('Incorrect credentials');
+        }
+  
+        const token = signToken(user);
+  
+        return { token, user };
+        },
         // create
         addUser: async (parent, args) => {
             const user = await User.create(args);
@@ -30,13 +47,7 @@ const resolvers = {
             if (context.user) {
               const updatedUser = await User.findOneAndUpdate(
                 { _id: context.user._id },
-                { $addToSet: { savedBooks: {
-                  bookId: args.bookId,
-                  authors: args.authors,
-                  title: args.title,
-                  description: args.description,
-                  image: args.image
-                } } },
+                { $addToSet: { savedBooks: bookData } },
                 { new: true, runValidators: true }
               );
       
@@ -59,23 +70,6 @@ const resolvers = {
       
             throw new AuthenticationError('You need to be logged in!');
         },
-        login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
-      
-            if (!user) {
-              throw new AuthenticationError('Incorrect credentials');
-            }
-      
-            const correctPw = await user.isCorrectPassword(password);
-      
-            if (!correctPw) {
-              throw new AuthenticationError('Incorrect credentials');
-            }
-      
-            const token = signToken(user);
-      
-            return { token, user };
-        }
     }
 };
     module.exports = resolvers;
